@@ -1,0 +1,23 @@
+# /etc/fail2ban/jail.d/horizonte-ssh.local — Bloqueo automático de ataques de fuerza bruta a SSH
+# ¡Ojo! fail2ban NO admite comentarios al final de una línea: el comentario pasaría a ser parte del valor.
+
+[DEFAULT]
+# Ubuntu 24.04 registra en el journal de systemd
+backend = systemd
+banaction = nftables-multiport
+# Nunca bloquearse a sí mismo
+ignoreip = 127.0.0.1/8 ::1
+
+[sshd]
+enabled = true
+# aggressive: también cuenta los intentos que se cortan antes de autenticar (típico de los bots)
+mode = aggressive
+port = ssh
+# En Ubuntu 24.04 la unidad se llama ssh.service (no sshd.service como espera el filtro por defecto)
+journalmatch = _SYSTEMD_UNIT=ssh.service + _COMM=sshd
+# 4 intentos en 10 minutos → bloqueo de 1 hora
+maxretry = 4
+findtime = 10m
+bantime = 1h
+# Reincidentes: 1 h, 2 h, 4 h…
+bantime.increment = true

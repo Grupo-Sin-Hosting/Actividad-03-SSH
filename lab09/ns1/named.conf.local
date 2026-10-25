@@ -1,0 +1,40 @@
+// /etc/bind/named.conf.local — ns1 con dos VISTAS (split-horizon)
+include "/etc/bind/transferencia.key";
+
+acl "red-colegio" { 10.10.10.0/24; 127.0.0.0/8; };
+
+// 1. Vista INTERNA: las PCs del colegio (y ns2, que copia las zonas internas)
+view "interna" {
+    match-clients { "red-colegio"; };          // TODO: solo la red del colegio (usa la acl "red-colegio")
+
+    zone "horizonte.internal" {
+        type primary;
+        file "/var/lib/bind/db.horizonte.internal";
+        allow-transfer { key "transferencia-horizonte"; };
+        also-notify { 10.10.10.3; };
+    };
+    zone "10.10.10.in-addr.arpa" {
+        type primary;
+        file "/var/lib/bind/db.10.10.10";
+        allow-transfer { key "transferencia-horizonte"; };
+        also-notify { 10.10.10.3; };
+    };
+    // El dominio público, pero con las IPs privadas: el colegio llega a su web sin salir a internet
+    zone "ue-horizonte.example" {
+        type primary;
+        file "/var/lib/bind/interna/db.ue-horizonte.example";
+    };
+};
+
+// 2. Vista EXTERNA: todo el resto del mundo. No existe horizonte.internal; el dominio público va FIRMADO.
+view "externa" {
+    match-clients { any; };
+
+    zone "ue-horizonte.example" {
+        dnssec-policy "horizonte";
+        inline-signing yes;
+        type primary;
+        file "/var/lib/bind/externa/db.ue-horizonte.example";
+        // TODO: firmar la zona con la política "horizonte" (¿qué más exige BIND 9.18? lee el error de named-checkconf)
+    };
+};

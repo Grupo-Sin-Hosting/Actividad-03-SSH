@@ -1,0 +1,16 @@
+# Claves privadas: NUNCA al repositorio
+*.private
+*.key
+transferencia*
+id_ed25519
+id_ed25519_*
+!*.pub
+*_ed25519
+lab07/compartido/
+# Credenciales
+creds.reales.json
+.env
+# Sistema
+Thumbs.db
+.DS_Store
+~$*

@@ -1,0 +1,28 @@
+// /etc/bind/named.conf.options — ns1 autoritativo con vistas y DNSSEC
+options {
+    directory "/var/cache/bind";
+    key-directory "/var/lib/bind/claves";     // aquí BIND guarda las claves DNSSEC que genera
+
+    listen-on    { any; };
+    listen-on-v6 { none; };
+    recursion no;
+    allow-transfer { none; };
+    version "no disponible";
+    minimal-responses yes;
+};
+
+// Política DNSSEC moderna: una sola clave (CSK) ECDSA P-256, NSEC3 sin iteraciones (RFC 9276), firmas de 14 días
+dnssec-policy "horizonte" {
+    keys { csk key-directory lifetime unlimited algorithm ecdsap256sha256; };
+    // TODO: NSEC3 con 0 iteraciones, sin opt-out y sin sal (recomendación RFC 9276)
+    nsec3param iterations 0 optout no salt-length 0;
+    signatures-validity 14d;
+    signatures-refresh 5d;
+    max-zone-ttl 1d;
+};
+
+// Registro de consultas por vista (para el monitoreo)
+logging {
+    channel consultas { file "/var/log/named/consultas.log" versions 3 size 10m; print-time yes; print-category yes; };
+    category queries { consultas; };
+};

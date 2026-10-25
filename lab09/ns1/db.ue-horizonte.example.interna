@@ -1,0 +1,12 @@
+; /var/lib/bind/interna/db.ue-horizonte.example — Lo que ven las PCs DEL COLEGIO (IPs privadas, nombres internos)
+$ORIGIN ue-horizonte.example.
+$TTL 300
+@   IN SOA ns1.ue-horizonte.example. ti.ue-horizonte.example. ( 2026101401 3600 600 1209600 300 )
+@       IN NS  ns1
+ns1     IN A   10.10.10.2
+@       IN A   10.10.10.20
+www     IN A   10.10.10.20           ; dentro del colegio, el sitio se sirve por la red local (rápido, sin salir a internet)
+portal  IN CNAME www
+mail    IN A   10.10.10.25
+@       IN MX  10 mail
+intranet IN A  10.10.10.21           ; solo existe para la red interna
