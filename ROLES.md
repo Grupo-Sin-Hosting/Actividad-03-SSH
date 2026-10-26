@@ -32,6 +32,15 @@ Hacia fuera solo publicamos el puerto 2222; cambiar el puerto es una capa extra,
 AllowGroups y fail2ban. Con LogLevel VERBOSE queda registrada la huella de la clave con la que entra cada persona.
 Siempre trabajé con dos sesiones abiertas y validé con sshd -t antes de reiniciar.
 
+### Juniors Parapaino — SCP, SFTP enjaulado y túneles SSH (Labs 10 y 11)
+
+En el Laboratorio 10 utilizamos SCP para publicar archivos en el servidor Horizonte y comprobamos cómo el grupo webadmin y el permiso setgid ayudan a gestionar los archivos compartidos.
+
+En el Laboratorio 11 configuramos al usuario comunicacion para utilizar únicamente SFTP, encerrado mediante chroot en /srv/horizonte. Verificamos que comienza en /www, no puede acceder a /etc ni abrir una terminal, y que los archivos publicados tienen permisos 664.
+
+También implementamos un túnel SSH con -L 9081:127.0.0.1:8081 para acceder desde Windows a la API interna del servidor. Aprendimos además que -D permite crear un proxy SOCKS y -J sirve para conectarse mediante un servidor bastión.
+
+Finalmente, ejecutamos el verificador del Laboratorio 11 y obtuvimos 15 de 15 comprobaciones correctas.
 ### Limber Quispe — Fail2ban y fuerza bruta (Lab 11)
 
 En el Laboratorio 11 configuramos Fail2ban para proteger el servidor Horizonte contra ataques de fuerza bruta por SSH. Establecimos un máximo de 4 intentos fallidos durante 10 minutos, con un bloqueo inicial de una hora y un tiempo mayor para reincidentes.
