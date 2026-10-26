@@ -41,6 +41,15 @@ En el Laboratorio 11 configuramos al usuario comunicacion para utilizar únicame
 También implementamos un túnel SSH con -L 9081:127.0.0.1:8081 para acceder desde Windows a la API interna del servidor. Aprendimos además que -D permite crear un proxy SOCKS y -J sirve para conectarse mediante un servidor bastión.
 
 Finalmente, ejecutamos el verificador del Laboratorio 11 y obtuvimos 15 de 15 comprobaciones correctas.
+### Limber Quispe — Fail2ban y fuerza bruta (Lab 11)
+
+En el Laboratorio 11 configuramos Fail2ban para proteger el servidor Horizonte contra ataques de fuerza bruta por SSH. Establecimos un máximo de 4 intentos fallidos durante 10 minutos, con un bloqueo inicial de una hora y un tiempo mayor para reincidentes.
+
+Realizamos una prueba desde otro contenedor con la IP `172.18.0.3`. Después de varios intentos fallidos, Fail2ban bloqueó automáticamente esa dirección mediante nftables. Posteriormente, utilizamos `unbanip` para retirar el bloqueo.
+
+También identificamos un problema con los registros del servidor: el servicio syslogd instalado durante el Laboratorio 10 interfería con el envío de mensajes al journal. Corregimos el problema y verificamos que Fail2ban pudiera detectar los intentos fallidos.
+
+Aprendimos que no basta con instalar una herramienta de seguridad: es necesario comprobar que realmente detecta y bloquea los ataques.
 
 ### Jacqueline Caceres — TELNET en claro (Lab 10)
 Ubuntu instala TELNET desactivado; lo activamos solo para la demostración y después lo desinstalamos.
