@@ -21,3 +21,13 @@ La configuración va en sshd_config.d/10-horizonte.conf porque se lee primero y 
 Hacia fuera solo publicamos el puerto 2222; cambiar el puerto es una capa extra, la defensa real son las claves,
 AllowGroups y fail2ban. Con LogLevel VERBOSE queda registrada la huella de la clave con la que entra cada persona.
 Siempre trabajé con dos sesiones abiertas y validé con sshd -t antes de reiniciar.
+
+### Limber Quispe — Fail2ban y fuerza bruta (Lab 11)
+
+En el Laboratorio 11 configuramos Fail2ban para proteger el servidor Horizonte contra ataques de fuerza bruta por SSH. Establecimos un máximo de 4 intentos fallidos durante 10 minutos, con un bloqueo inicial de una hora y un tiempo mayor para reincidentes.
+
+Realizamos una prueba desde otro contenedor con la IP `172.18.0.3`. Después de varios intentos fallidos, Fail2ban bloqueó automáticamente esa dirección mediante nftables. Posteriormente, utilizamos `unbanip` para retirar el bloqueo.
+
+También identificamos un problema con los registros del servidor: el servicio syslogd instalado durante el Laboratorio 10 interfería con el envío de mensajes al journal. Corregimos el problema y verificamos que Fail2ban pudiera detectar los intentos fallidos.
+
+Aprendimos que no basta con instalar una herramienta de seguridad: es necesario comprobar que realmente detecta y bloquea los ataques.
