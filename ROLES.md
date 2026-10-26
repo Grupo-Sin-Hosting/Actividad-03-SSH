@@ -21,3 +21,13 @@ La configuración va en sshd_config.d/10-horizonte.conf porque se lee primero y 
 Hacia fuera solo publicamos el puerto 2222; cambiar el puerto es una capa extra, la defensa real son las claves,
 AllowGroups y fail2ban. Con LogLevel VERBOSE queda registrada la huella de la clave con la que entra cada persona.
 Siempre trabajé con dos sesiones abiertas y validé con sshd -t antes de reiniciar.
+
+### Juniors Parapaino — SCP, SFTP enjaulado y túneles SSH (Labs 10 y 11)
+
+En el Laboratorio 10 utilizamos SCP para publicar archivos en el servidor Horizonte y comprobamos cómo el grupo webadmin y el permiso setgid ayudan a gestionar los archivos compartidos.
+
+En el Laboratorio 11 configuramos al usuario comunicacion para utilizar únicamente SFTP, encerrado mediante chroot en /srv/horizonte. Verificamos que comienza en /www, no puede acceder a /etc ni abrir una terminal, y que los archivos publicados tienen permisos 664.
+
+También implementamos un túnel SSH con -L 9081:127.0.0.1:8081 para acceder desde Windows a la API interna del servidor. Aprendimos además que -D permite crear un proxy SOCKS y -J sirve para conectarse mediante un servidor bastión.
+
+Finalmente, ejecutamos el verificador del Laboratorio 11 y obtuvimos 15 de 15 comprobaciones correctas.
