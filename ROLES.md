@@ -14,6 +14,16 @@ parte con sus palabras, y abre un Pull Request que diga `Closes #N` (su issue).
 
 ## Notas de cada integrante
 
+### Lucas Carrasco — Entorno y DNS profesional (Lab 9)
+El entorno tiene dos partes: el servidor srv-horizonte en Docker, que solo publica SSH en el puerto 2222,
+y la red red_dns, donde ns1 tiene dos caras: una para el colegio (10.10.10.2) y otra para internet (172.30.0.2).
+Antes, desde internet se veían las IP internas. Con las vistas de BIND, el mismo nombre responde distinto:
+el colegio recibe 10.10.10.20 e internet 203.0.113.20, y horizonte.internal da REFUSED desde fuera.
+El orden importa: gana la primera vista que coincide, por eso "any" va al final.
+El dominio público está firmado con dnssec-policy (ECDSA P-256 y NSEC3 sin iteraciones ni sal).
+Con delv y el ancla correcta sale "fully validated"; con una sola letra cambiada, "broken trust chain".
+El DS 18104 se entrega al registrador para que la cadena empiece en la raíz.
+
 ### Lizeth Rodríguez — Claves ed25519 y sshd endurecido (Lab 11)
 El servidor del colegio ahora solo acepta SSH con clave: apagamos las contraseñas (PasswordAuthentication no)
 y el acceso de root (PermitRootLogin no), y solo pueden entrar los grupos sshadmins y sftp-web (AllowGroups).
@@ -31,3 +41,12 @@ En el Laboratorio 11 configuramos al usuario comunicacion para utilizar únicame
 También implementamos un túnel SSH con -L 9081:127.0.0.1:8081 para acceder desde Windows a la API interna del servidor. Aprendimos además que -D permite crear un proxy SOCKS y -J sirve para conectarse mediante un servidor bastión.
 
 Finalmente, ejecutamos el verificador del Laboratorio 11 y obtuvimos 15 de 15 comprobaciones correctas.
+
+### Jacqueline Caceres — TELNET en claro (Lab 10)
+Ubuntu instala TELNET desactivado; lo activamos solo para la demostración y después lo desinstalamos.
+Mientras tcpdump grababa el puerto 23, se inició sesión con la usuaria de prueba "secretaria".
+En Wireshark, con Analizar > Seguir > Flujo TCP, se lee todo: "login:", el usuario, "Password:",
+la contraseña Circular2026 y hasta el texto escrito en la sesión. Cualquiera en la misma red podría verlo.
+TELNET todavía existe en routers e impresoras viejos porque es muy liviano y nunca se actualizaron;
+en esos casos hay que reemplazarlo por SSH o aislarlo en una red de gestión.
+
