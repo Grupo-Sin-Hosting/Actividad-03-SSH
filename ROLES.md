@@ -20,4 +20,4 @@ y el acceso de root (PermitRootLogin no), y solo pueden entrar los grupos sshadm
 La configuración va en sshd_config.d/10-horizonte.conf porque se lee primero y en sshd gana el primer valor.
 Hacia fuera solo publicamos el puerto 2222; cambiar el puerto es una capa extra, la defensa real son las claves,
 AllowGroups y fail2ban. Con LogLevel VERBOSE queda registrada la huella de la clave con la que entra cada persona.
-Siempre trabajé con dos sesiones abiertas y validé con sshd -t antes de reiniciar.
+Siempre trabajé con dos sesiones abiertas y validé con sshd -t antes de reiniciar
