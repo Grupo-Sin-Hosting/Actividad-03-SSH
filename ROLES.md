@@ -13,3 +13,11 @@ Cada integrante: crea su rama, agrega en `ROLES.md` (debajo de su fila, en la se
 parte con sus palabras, y abre un Pull Request que diga `Closes #N` (su issue).
 
 ## Notas de cada integrante
+
+### Lizeth Rodríguez — Claves ed25519 y sshd endurecido (Lab 11)
+El servidor del colegio ahora solo acepta SSH con clave: apagamos las contraseñas (PasswordAuthentication no)
+y el acceso de root (PermitRootLogin no), y solo pueden entrar los grupos sshadmins y sftp-web (AllowGroups).
+La configuración va en sshd_config.d/10-horizonte.conf porque se lee primero y en sshd gana el primer valor.
+Hacia fuera solo publicamos el puerto 2222; cambiar el puerto es una capa extra, la defensa real son las claves,
+AllowGroups y fail2ban. Con LogLevel VERBOSE queda registrada la huella de la clave con la que entra cada persona.
+Siempre trabajé con dos sesiones abiertas y validé con sshd -t antes de reiniciar.
